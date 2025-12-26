@@ -1,6 +1,6 @@
 {
-  "name": "RPL Fan Passport",
-  "description": "A gamified fan experience for the Russian Premier League featuring a seasonal Battle Pass, interactive tasks, and exclusive rewards.",
+  "name": "RPL Fan Pass",
+  "description": "Элитный боевой пропуск для истинных болельщиков Российской Премьер-Лиги.",
   "requestFramePermissions": [
     "camera",
     "geolocation"
