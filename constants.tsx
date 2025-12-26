@@ -1,15 +1,19 @@
 
 import React from 'react';
-import { Reward, RewardTier, Task, Partner } from './types';
+import { Reward, RewardTier, Task, Partner, User } from './types';
 
-export const INITIAL_USER = {
+export const INITIAL_USER: User = {
   name: "Александр П.",
   level: 27,
   xp: 1250,
   nextLevelXp: 1500,
   isPremium: true,
   rank: "Ветеран Трибун",
-  fanId: "RPL-882-991"
+  fanId: "RPL-882-991",
+  totalTasksDone: 142,
+  matchesVisited: 12,
+  checkins: 156,
+  totalXpEarned: 42500
 };
 
 export const MOCK_REWARDS: Reward[] = Array.from({ length: 50 }, (_, i) => ({
@@ -73,13 +77,6 @@ export const MOCK_PARTNERS: Partner[] = [
     offer: '+100 XP за каждую заправку',
     xpBonus: 100,
     logo: 'https://picsum.photos/seed/fuel/100/100'
-  },
-  {
-    id: 'p3',
-    name: 'Такси',
-    offer: '30 XP за поездку на стадион',
-    xpBonus: 30,
-    logo: 'https://picsum.photos/seed/taxi/100/100'
   }
 ];
 

@@ -15,6 +15,42 @@ const App: React.FC = () => {
   const [tasks, setTasks] = useState(MOCK_TASKS);
   const [isLoadingDaily, setIsLoadingDaily] = useState(false);
 
+  const handleCompleteTask = (taskId: string) => {
+    const task = tasks.find(t => t.id === taskId);
+    if (!task || task.completed) return;
+
+    // 1. Mark task as completed
+    setTasks(prev => prev.map(t => 
+      t.id === taskId ? { ...t, completed: true, progress: t.total } : t
+    ));
+
+    // 2. Update user XP and stats
+    setUser(prev => {
+      let newXp = prev.xp + task.xpReward;
+      let newLevel = prev.level;
+      let newNextXp = prev.nextLevelXp;
+
+      // Handle Level Up
+      if (newXp >= newNextXp) {
+        newLevel += 1;
+        newXp -= newNextXp;
+        newNextXp = Math.floor(newNextXp * 1.1); // Increase difficulty
+      }
+
+      return {
+        ...prev,
+        level: newLevel,
+        xp: newXp,
+        nextLevelXp: newNextXp,
+        totalTasksDone: prev.totalTasksDone + 1,
+        totalXpEarned: prev.totalXpEarned + task.xpReward,
+        // If it was a match task, increment matches
+        matchesVisited: task.category === 'match' ? prev.matchesVisited + 1 : prev.matchesVisited,
+        checkins: task.category === 'match' ? prev.checkins + 1 : prev.checkins
+      };
+    });
+  };
+
   const fetchDailyChallenge = async () => {
     setIsLoadingDaily(true);
     const daily = await generateDailyFanTask(user.name, user.level);
@@ -32,12 +68,8 @@ const App: React.FC = () => {
     setIsLoadingDaily(false);
   };
 
-  useEffect(() => {
-    // In a real app, check for existing daily challenge or fetch once
-  }, []);
-
   return (
-    <div className="min-h-screen max-w-md mx-auto relative flex flex-col bg-rpl-dark">
+    <div className="min-h-screen max-w-md mx-auto relative flex flex-col bg-[#0b0f19] text-[#f8fafc]">
       <Header user={user} />
 
       <main className="flex-1 overflow-y-auto custom-scrollbar">
@@ -79,7 +111,7 @@ const App: React.FC = () => {
                       <LucidePlus className={`w-5 h-5 ${isLoadingDaily ? 'animate-spin' : ''}`} />
                     </button>
                 </div>
-                <Tasks tasks={tasks} />
+                <Tasks tasks={tasks} onComplete={handleCompleteTask} />
             </div>
           </div>
         )}
@@ -107,7 +139,7 @@ const App: React.FC = () => {
       </main>
 
       {/* Persistent Navigation */}
-      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-rpl-dark/95 backdrop-blur-xl border-t border-gray-800 px-6 pt-3 pb-8 flex justify-between items-center z-50 safe-bottom">
+      <nav className="fixed bottom-0 left-0 right-0 max-w-md mx-auto bg-[#0b0f19]/95 backdrop-blur-xl border-t border-gray-800 px-6 pt-3 pb-8 flex justify-between items-center z-50 safe-bottom">
         <button 
           onClick={() => setActiveTab('tasks')}
           className={`flex flex-col items-center gap-1.5 transition-all ${activeTab === 'tasks' ? 'text-blue-500 scale-110' : 'text-gray-500'}`}
@@ -136,7 +168,7 @@ const App: React.FC = () => {
           <div className="relative">
             <LucideUser className="w-6 h-6" />
             {activeTab !== 'profile' && (
-              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 border-2 border-rpl-dark rounded-full"></div>
+              <div className="absolute -top-1 -right-1 w-2.5 h-2.5 bg-red-500 border-2 border-[#0b0f19] rounded-full"></div>
             )}
           </div>
           <span className="text-[10px] font-bold uppercase tracking-wider">Профиль</span>

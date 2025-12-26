@@ -33,6 +33,11 @@ export interface User {
   isPremium: boolean;
   rank: string;
   fanId: string;
+  // Stats
+  totalTasksDone: number;
+  matchesVisited: number;
+  checkins: number;
+  totalXpEarned: number;
 }
 
 export interface Partner {
