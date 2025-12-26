@@ -118,7 +118,7 @@ const Tasks: React.FC<TasksProps> = ({ tasks, onComplete }) => {
                 </div>
               </div>
             </div>
-          }) ) : (
+          }) : (
             <div className="text-center py-20 bg-white/5 rounded-[2rem] border border-dashed border-white/10">
                <p className="text-gray-500 font-bold uppercase text-[10px] tracking-widest">Все задания выполнены!</p>
             </div>
